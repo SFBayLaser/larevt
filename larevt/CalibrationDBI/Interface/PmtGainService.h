@@ -50,6 +50,6 @@ namespace lariov {
 } // namespace lariov
 
 
-DECLARE_ART_SERVICE_INTERFACE(lariov::PmtGainService, LEGACY)
+DECLARE_ART_SERVICE_INTERFACE(lariov::PmtGainService, SHARED)
 
 #endif

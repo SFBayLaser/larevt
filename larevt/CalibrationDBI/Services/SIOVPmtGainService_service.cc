@@ -5,6 +5,7 @@
 #include "fhiclcpp/ParameterSet.h"
 #include "larevt/CalibrationDBI/Interface/PmtGainService.h"
 #include "larevt/CalibrationDBI/Providers/SIOVPmtGainProvider.h"
+#include "larcore/CoreUtils/EnsureOnlyOneSchedule.h"
 
 namespace lariov{
 
@@ -14,7 +15,8 @@ namespace lariov{
      a pmt gain retrieval service for database scheme in which
      all elements in a database folder share a common interval of validity
   */
-  class SIOVPmtGainService : public PmtGainService {
+  class SIOVPmtGainService : public PmtGainService,
+                             private lar::EnsureOnlyOneSchedule<SIOVPmtGainService> {
 
     public:
 
@@ -39,7 +41,7 @@ namespace lariov{
   };
 }//end namespace lariov
 
-DECLARE_ART_SERVICE_INTERFACE_IMPL(lariov::SIOVPmtGainService, lariov::PmtGainService, LEGACY)
+DECLARE_ART_SERVICE_INTERFACE_IMPL(lariov::SIOVPmtGainService, lariov::PmtGainService, SHARED)
 
 
 namespace lariov{

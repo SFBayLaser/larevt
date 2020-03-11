@@ -5,6 +5,7 @@
 #include "fhiclcpp/ParameterSet.h"
 #include "larevt/CalibrationDBI/Interface/ElectronicsCalibService.h"
 #include "larevt/CalibrationDBI/Providers/SIOVElectronicsCalibProvider.h"
+#include "larcore/CoreUtils/EnsureOnlyOneSchedule.h"
 
 namespace lariov{
 
@@ -14,7 +15,8 @@ namespace lariov{
      an electronics calibration retrieval service for database scheme in which
      all elements in a database folder share a common interval of validity
   */
-  class SIOVElectronicsCalibService : public ElectronicsCalibService {
+  class SIOVElectronicsCalibService : public ElectronicsCalibService,
+                                      private lar::EnsureOnlyOneSchedule<SIOVElectronicsCalibService> {
 
     public:
 
@@ -39,7 +41,7 @@ namespace lariov{
   };
 }//end namespace lariov
 
-DECLARE_ART_SERVICE_INTERFACE_IMPL(lariov::SIOVElectronicsCalibService, lariov::ElectronicsCalibService, LEGACY)
+DECLARE_ART_SERVICE_INTERFACE_IMPL(lariov::SIOVElectronicsCalibService, lariov::ElectronicsCalibService, SHARED)
 
 
 namespace lariov{
