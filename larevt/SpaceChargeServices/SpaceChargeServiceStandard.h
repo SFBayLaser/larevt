@@ -9,34 +9,40 @@
 #ifndef SPACECHARGESERVICESTANDARD_H
 #define SPACECHARGESERVICESTANDARD_H
 
-#include "fhiclcpp/ParameterSet.h"
+#include "art/Framework/Principal/Run.h"
 #include "art/Framework/Services/Registry/ActivityRegistry.h"
 #include "art/Framework/Services/Registry/ServiceHandle.h"
 #include "art/Framework/Services/Registry/ServiceMacros.h"
-#include "art/Framework/Principal/Run.h"
+#include "fhiclcpp/ParameterSet.h"
 #include "larevt/SpaceCharge/SpaceChargeStandard.h"
 #include "larevt/SpaceChargeServices/SpaceChargeService.h"
 
-
-namespace spacecharge{
+namespace spacecharge {
   class SpaceChargeServiceStandard : public SpaceChargeService {
-    public:
+  public:
+    // this enables art to print the configuration help:
+    // using Parameters =
+    // art::ServiceTable<spacecharge::SpaceChargeStandard::ConfigurationParameters_t>;
 
-      // this enables art to print the configuration help:
-      //using Parameters = art::ServiceTable<spacecharge::SpaceChargeStandard::ConfigurationParameters_t>;
+    SpaceChargeServiceStandard(fhicl::ParameterSet const& pset, art::ActivityRegistry& reg);
 
-      SpaceChargeServiceStandard(fhicl::ParameterSet const& pset, art::ActivityRegistry& reg);
+  private:
+    void reconfigure(fhicl::ParameterSet const& pset);
+    void preBeginRun(const art::Run& run);
 
-      virtual void   reconfigure(fhicl::ParameterSet const& pset) override;
-      void   preBeginRun(const art::Run& run);
+    const provider_type*
+    provider() const override
+    {
+      return &fProp;
+    }
 
-      virtual const  provider_type* provider() const override { return fProp.get();}
+    spacecharge::SpaceChargeStandard fProp;
 
-    private:
+  }; // class SpaceChargeServiceStandard
+} // namespace spacecharge
 
-      std::unique_ptr<spacecharge::SpaceChargeStandard> fProp;
+DECLARE_ART_SERVICE_INTERFACE_IMPL(spacecharge::SpaceChargeServiceStandard,
+                                   spacecharge::SpaceChargeService,
+                                   SHARED)
 
-    }; // class SpaceChargeServiceStandard
-} //namespace spacecharge
-DECLARE_ART_SERVICE_INTERFACE_IMPL(spacecharge::SpaceChargeServiceStandard, spacecharge::SpaceChargeService, LEGACY)
 #endif // SPACECHARGESERVICESTANDARD_H
