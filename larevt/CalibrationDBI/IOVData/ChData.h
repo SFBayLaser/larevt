@@ -39,6 +39,9 @@ namespace lariov {
       inline bool operator<(const ChData& ch) const
       { return fChannel < ch.Channel(); }
 
+      inline bool operator==(const ChData& ch) const
+      { return fChannel == ch.Channel(); }
+
     protected:
 
       unsigned int fChannel;

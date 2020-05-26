@@ -86,14 +86,14 @@ namespace lariov {
         DBChannelID_t ch = geo->PlaneWireToChannel(*itW);
 
         if (geo->SignalType(ch) == geo::kCollection) {
-	  DefaultColl.SetChannel(ch);
-	  fData.AddOrReplaceRow(DefaultColl);
-	}
-	else if (geo->SignalType(ch) == geo::kInduction) {
-	  DefaultInd.SetChannel(ch);
-	  fData.AddOrReplaceRow(DefaultInd);
-	}
-	else throw IOVDataError("Wire type is not collection or induction!");
+	        DefaultColl.SetChannel(ch);
+	        fData.AddOrReplaceRow(DefaultColl);
+	      }
+	      else if (geo->SignalType(ch) == geo::kInduction) {
+	        DefaultInd.SetChannel(ch);
+	        fData.AddOrReplaceRow(DefaultInd);
+	      }
+	      else throw IOVDataError("Wire type is not collection or induction!");
       }
     }
     else if (fDataSource == DataSource::File) {
