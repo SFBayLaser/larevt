@@ -59,13 +59,14 @@ namespace lariov {
     else              fDataSource = DataSource::Default;
 
     if (fDataSource == DataSource::Default) {
-      std::cout << "Using default pedestal values\n";
       float default_collmean     = p.get<float>("DefaultCollMean", 400.0);
       float default_collrms      = p.get<float>("DefaultCollRms", 0.3);
       float default_mean_err     = p.get<float>("DefaultMeanErr", 0.0);
       float default_rms_err      = p.get<float>("DefaultRmsErr", 0.0);
       float default_indmean      = p.get<float>("DefaultIndMean", 2048.0);
       float default_indrms       = p.get<float>("DefaultIndRms", 0.3);
+
+      std::cout << "DetPedestalRetrievalAlg: Using default pedestal values, collection: " << default_collmean << ", induction: " << default_indmean << std::endl;
 
       DetPedestal DefaultColl(0);
       DetPedestal DefaultInd(0);
@@ -85,11 +86,15 @@ namespace lariov {
       for ( ; itW != geo->end_wire_id(); ++itW) {
         DBChannelID_t ch = geo->PlaneWireToChannel(*itW);
 
-        if (geo->SignalType(ch) == geo::kCollection) {
+//        if (geo->SignalType(ch) == geo::kCollection) {
+//          if ((*itW).Plane != 2) std::cout << "-DetPedestalRetrievalAlg: SignalType collection but plane is: " << (*itW).Plane << std::endl;
+        if (itW->Plane == 2){
 	        DefaultColl.SetChannel(ch);
 	        fData.AddOrReplaceRow(DefaultColl);
 	      }
-	      else if (geo->SignalType(ch) == geo::kInduction) {
+        else if (itW->Plane == 0 || itW->Plane == 1){
+//	      else if (geo->SignalType(ch) == geo::kInduction) {
+//          if ((*itW).Plane == 2) std::cout << "-DetPedestalRetrievalAlg: SignalType induction but plane is: " << (*itW).Plane << std::endl;
 	        DefaultInd.SetChannel(ch);
 	        fData.AddOrReplaceRow(DefaultInd);
 	      }
